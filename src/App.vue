@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <SearchForm/>
+  <div id="app" class="w-75 mx-auto pt-5">
+    <SearchForm class="pb-4"/>
     <PostingBoard/>
   </div>
 </template>
