@@ -1,16 +1,12 @@
 import axios from "axios";
-import dayjs from "dayjs";
 
 export default {
-  getQuestionsForTagByCreationDate(tag) {
+  getCommentsForQuestion(questionID) {
     // Define query parameters needed by the Stack Exchange API
     let queryParams = {
       params: {
-        tagged: tag,
-        order: "desc",
+        order: "asc",
         sort: "creation",
-        page: 1,
-        pageSize: 10,
         site: "stackoverflow"
       }
     }
@@ -18,7 +14,7 @@ export default {
     // Make a GET request to retrieve all answers to the question
     return new Promise((resolve, reject) => {
       axios
-        .get(process.env.VUE_APP_URL + `/questions`, queryParams)
+        .get(process.env.VUE_APP_URL + `/questions/${questionID}/comments`, queryParams)
         .then(res => {
           resolve(res.data);
         })
@@ -27,17 +23,12 @@ export default {
         });
     });
   },
-  getQuestionsForTagByVotes(tag) {
+  getCommentsForAnswer(answerID) {
     // Define query parameters needed by the Stack Exchange API
     let queryParams = {
       params: {
-        tagged: tag,
-        order: "desc",
-        sort: "votes",
-        page: 1,
-        pageSize: 10,
-        fromdate: dayjs().subtract(1, "week").unix(),
-        todate: dayjs().unix(),
+        order: "asc",
+        sort: "creation",
         site: "stackoverflow"
       }
     }
@@ -45,7 +36,7 @@ export default {
     // Make a GET request to retrieve all answers to the question
     return new Promise((resolve, reject) => {
       axios
-        .get(process.env.VUE_APP_URL + `/questions`, queryParams)
+        .get(process.env.VUE_APP_URL + `/answers/${answerID}/comments`, queryParams)
         .then(res => {
           resolve(res.data);
         })
