@@ -87,10 +87,11 @@ let getFullQuestion = function(questionID) {
         // Parse the question
         return _parseQuestion(res.data.items[0])
       })
-      .then(res => {
+      .then(question => {
         // Fetch all comments for the question
-        let question = res
-        question["comments"] = comments.getCommentsForQuestion(question["id"])
+        comments.getCommentsForQuestion(question["id"]).then(res => {
+          question["comments"] = res
+        })
         resolve(question)
       })
       .catch(err => {

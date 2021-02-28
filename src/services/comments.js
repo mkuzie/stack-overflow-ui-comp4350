@@ -1,4 +1,15 @@
 import axios from "axios";
+import dayjs from "dayjs";
+import _ from "lodash";
+import Comment from "@/domain-objects/comment";
+
+let _parseComment = function(rawComment) {
+  return new Comment(rawComment["comment_id"],
+                     rawComment["body"],
+                     rawComment["score"],
+                     dayjs.unix(rawComment["creation_date"])
+  )
+}
 
 export default {
   getCommentsForQuestion(questionID) {
@@ -7,6 +18,7 @@ export default {
       params: {
         order: "asc",
         sort: "creation",
+        filter: "withbody",
         site: "stackoverflow"
       }
     }
@@ -16,7 +28,8 @@ export default {
       axios
         .get(process.env.VUE_APP_URL + `/questions/${questionID}/comments`, queryParams)
         .then(res => {
-          resolve(res.data);
+          let comments = _.map(res.data.items, (rawComment) => (_parseComment(rawComment)))
+          resolve(comments);
         })
         .catch(err => {
           reject(err);
@@ -29,6 +42,7 @@ export default {
       params: {
         order: "asc",
         sort: "creation",
+        filter: "withbody",
         site: "stackoverflow"
       }
     }
@@ -38,7 +52,8 @@ export default {
       axios
         .get(process.env.VUE_APP_URL + `/answers/${answerID}/comments`, queryParams)
         .then(res => {
-          resolve(res.data);
+          let comments = _.map(res.data.items, (rawComment) => (_parseComment(rawComment)))
+          resolve(comments);
         })
         .catch(err => {
           reject(err);

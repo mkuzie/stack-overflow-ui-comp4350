@@ -24,17 +24,19 @@
           </b-col>
         </b-row>
       </b-card-header>
-      <b-card-body v-if="show">
-        <!-- Question Body -->
-        <PostContent :post="fullQuestion" :comments="[]" />
+      <b-collapse :visible="show">
+        <b-card-body>
+          <!-- Question Body -->
+          <PostContent :post="fullQuestion" />
 
-        <!-- Answers -->
-        <h5 class="py-4">{{ fullAnswers.length }} Answers</h5>
-        <div v-for="(fullAnswer, index) in fullAnswers" v-bind:key="index">
-          <PostContent :post="fullAnswer" :comments="[]" />
-          <hr/>
-        </div>
-      </b-card-body>
+          <!-- Answers -->
+          <h5 class="py-4">{{ fullAnswers.length }} Answers</h5>
+          <div v-for="(fullAnswer, index) in fullAnswers" v-bind:key="index">
+            <PostContent :post="fullAnswer" />
+            <hr/>
+          </div>
+        </b-card-body>
+      </b-collapse>
     </b-card>
   </div>
 </template>
@@ -42,6 +44,8 @@
 <script>
 import PostContent from "@/components/PostContent";
 import questions from "@/services/questions";
+import answers from "@/services/answers";
+
 export default {
   name: "Posting",
   components: { PostContent },
@@ -60,16 +64,13 @@ export default {
   },
   methods: {
     clickHandler() {
+      Promise.all([questions.getFullQuestion(this.question.id), answers.getFullAnswers(this.question.id)]).then(res => {
+        this.fullQuestion = res[0]
+        this.fullAnswers = res[1]
 
-      this.show = !this.show
-    },
-    loadFullQuestion() {
-      questions.getFullQuestion(questions.id).then(response => {
-        this.fullQuestion = response;
+        // Once
+        this.show = !this.show
       })
-    },
-    loadFullAnswers() {
-
     }
   }
 }

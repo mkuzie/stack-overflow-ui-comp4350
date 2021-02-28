@@ -14,11 +14,11 @@
 
         <!-- Comments -->
         <div class="mt-4">
-          <div v-for="(comment, index) in comments" :key="index" class="small">
+          <div v-for="(comment, index) in post['comments']" :key="index" class="small">
             <hr class="my-2"/>
             <Comment :comment-text="comment.content" :vote-count="comment.voteCount"  :creation-date="comment.creationDate" />
           </div>
-          <hr v-if="comments.length > 0" class="my-2"/>
+          <hr v-if="post['comments'].length > 0" class="my-2"/>
         </div>
       </b-col>
     </b-row>
@@ -36,13 +36,6 @@ export default {
     post: {
       type: Object,
       required: true
-    },
-    comments: {
-      type: Array,
-      required: false,
-      default: function () {
-        return []
-      }
     }
   },
   data() {
