@@ -62,13 +62,17 @@ export default {
       fullAnswers: []
     }
   },
+  watch: {
+    question: function() {
+      this.show = false;
+    }
+  },
   methods: {
     clickHandler() {
       if (!this.show) {
         Promise.all([questions.getFullQuestion(this.question.id), answers.getFullAnswers(this.question.id)]).then(res => {
           this.fullQuestion = res[0]
           this.fullAnswers = res[1]
-
           this.toggleShow()
         })
       } else {

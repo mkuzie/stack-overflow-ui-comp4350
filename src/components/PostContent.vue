@@ -27,7 +27,6 @@
 
 <script>
 import Comment from "@/components/Comment";
-import CommentObject from "@/domain-objects/comment";
 
 export default {
   name: "PostContent",
@@ -36,15 +35,6 @@ export default {
     post: {
       type: Object,
       required: true
-    }
-  },
-  data() {
-    return {
-      tempComments: [
-        new CommentObject("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 2, this.$dayjs()),
-        new CommentObject("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 2, this.$dayjs()),
-        new CommentObject("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 2, this.$dayjs())
-      ]
     }
   }
 }
