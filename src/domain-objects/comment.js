@@ -1,7 +1,7 @@
-export default class Comment {
-  constructor(content, voteCount, creationDate) {
-    this.content = content;
-    this.voteCount = voteCount;
-    this.creationDate = creationDate;
+import Post from "@/domain-objects/post";
+
+export default class Comment extends Post{
+  constructor(id, content, voteCount, creationDate) {
+    super(id, content, voteCount, creationDate);
   }
 }

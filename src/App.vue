@@ -1,6 +1,5 @@
 <template>
-  <div id="app" class="w-75 mx-auto pt-5">
-    <SearchForm class="pb-4"/>
+  <div id="app" class="w-75 mx-auto py-5">
     <PostingBoard/>
   </div>
 </template>
@@ -8,10 +7,9 @@
 <script>
 
 import PostingBoard from "@/components/PostingBoard";
-import SearchForm from "@/components/SearchForm";
 
 export default {
   name: 'App',
-  components: {SearchForm, PostingBoard}
+  components: {PostingBoard}
 }
 </script>
