@@ -16,7 +16,7 @@
         <div class="mt-4">
           <div v-for="(comment, index) in post['comments']" :key="index" class="small">
             <hr class="my-2"/>
-            <Comment :comment-text="comment.content" :vote-count="comment.voteCount"  :creation-date="comment.creationDate" />
+            <Comment :comment="comment" />
           </div>
           <hr v-if="post['comments'].length > 0" class="my-2"/>
         </div>

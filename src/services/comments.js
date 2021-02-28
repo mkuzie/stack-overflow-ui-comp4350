@@ -5,6 +5,7 @@ import Comment from "@/domain-objects/comment";
 
 let _parseComment = function(rawComment) {
   return new Comment(rawComment["comment_id"],
+                     rawComment["post_id"],
                      rawComment["body"],
                      rawComment["score"],
                      dayjs.unix(rawComment["creation_date"])
@@ -36,7 +37,7 @@ export default {
         });
     });
   },
-  getCommentsForAnswer(answerID) {
+  getCommentsForAnswers(answerIDs) {
     // Define query parameters needed by the Stack Exchange API
     let queryParams = {
       params: {
@@ -47,10 +48,13 @@ export default {
       }
     }
 
+    // Serialize the list of answer IDs
+    let serializedIDs = answerIDs.join(";");
+
     // Make a GET request to retrieve all answers to the question
     return new Promise((resolve, reject) => {
       axios
-        .get(process.env.VUE_APP_URL + `/answers/${answerID}/comments`, queryParams)
+        .get(process.env.VUE_APP_URL + `/answers/${serializedIDs}/comments`, queryParams)
         .then(res => {
           let comments = _.map(res.data.items, (rawComment) => (_parseComment(rawComment)))
           resolve(comments);

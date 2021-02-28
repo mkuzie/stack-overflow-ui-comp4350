@@ -25,7 +25,7 @@
         </b-row>
       </b-card-header>
       <b-collapse :visible="show">
-        <b-card-body>
+        <b-card-body v-if="show">
           <!-- Question Body -->
           <PostContent :post="fullQuestion" />
 
@@ -64,13 +64,19 @@ export default {
   },
   methods: {
     clickHandler() {
-      Promise.all([questions.getFullQuestion(this.question.id), answers.getFullAnswers(this.question.id)]).then(res => {
-        this.fullQuestion = res[0]
-        this.fullAnswers = res[1]
+      if (!this.show) {
+        Promise.all([questions.getFullQuestion(this.question.id), answers.getFullAnswers(this.question.id)]).then(res => {
+          this.fullQuestion = res[0]
+          this.fullAnswers = res[1]
 
-        // Once
-        this.show = !this.show
-      })
+          this.toggleShow()
+        })
+      } else {
+        this.toggleShow()
+      }
+    },
+    toggleShow()  {
+      this.show = !this.show
     }
   }
 }

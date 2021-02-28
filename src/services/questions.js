@@ -10,7 +10,7 @@ let _parseQuestion = function(rawQuestion) {
                       rawQuestion["body"],
                       rawQuestion["score"],
                       dayjs.unix(rawQuestion["creation_date"]),
-                      undefined
+                      []
   )
 }
 

@@ -7,7 +7,7 @@
       </b-col>
       <b-col cols="9">
         <!-- Question Title -->
-        <div>{{ comment["content"] }}</div>
+        <div v-html="comment['content']" />
       </b-col>
       <b-col>
         <!-- Creation Date -->
