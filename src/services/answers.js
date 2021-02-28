@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default {
-  getAnswersForQuestion(questionID) {
+  getFullAnswers(questionID) {
     // Define query parameters needed by the Stack Exchange API
     let queryParams = {
       params: {

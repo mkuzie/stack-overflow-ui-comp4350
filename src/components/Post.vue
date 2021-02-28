@@ -24,25 +24,24 @@
           </b-col>
         </b-row>
       </b-card-header>
-      <b-collapse :visible="show">
-        <b-card-body>
-          <!-- Question Body -->
-          <PostContent :post="question" :comments="questionComments" />
+      <b-card-body v-if="show">
+        <!-- Question Body -->
+        <PostContent :post="fullQuestion" :comments="[]" />
 
-          <!-- Answers -->
-          <h5 class="py-4">{{ answers.length }} Answers</h5>
-          <div v-for="(answer, index) in answers" v-bind:key="index">
-            <PostContent :post="answer" :comments="answerComments" />
-            <hr/>
-          </div>
-        </b-card-body>
-      </b-collapse>
+        <!-- Answers -->
+        <h5 class="py-4">{{ fullAnswers.length }} Answers</h5>
+        <div v-for="(fullAnswer, index) in fullAnswers" v-bind:key="index">
+          <PostContent :post="fullAnswer" :comments="[]" />
+          <hr/>
+        </div>
+      </b-card-body>
     </b-card>
   </div>
 </template>
 
 <script>
 import PostContent from "@/components/PostContent";
+import questions from "@/services/questions";
 export default {
   name: "Posting",
   components: { PostContent },
@@ -55,9 +54,8 @@ export default {
   data() {
     return {
       show: false,
-      questionComments: [],
-      answers: [],
-      answerComments: []
+      fullQuestion: null,
+      fullAnswers: []
     }
   },
   methods: {
@@ -66,9 +64,11 @@ export default {
       this.show = !this.show
     },
     loadFullQuestion() {
-
+      questions.getFullQuestion(questions.id).then(response => {
+        this.fullQuestion = response;
+      })
     },
-    loadAnswers() {
+    loadFullAnswers() {
 
     }
   }

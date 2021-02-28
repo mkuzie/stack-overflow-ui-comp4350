@@ -1,44 +1,46 @@
 <template>
   <div>
     <SearchForm v-on:search="searchHandler" class="pb-4"/>
-    <Post v-for="(question, index) in combinedQuestions" v-bind:key="index" :question="question" />
+    <Post v-for="(question, index) in questions" v-bind:key="index" :question="question" />
   </div>
 </template>
 
 <script>
 import Post from "@/components/Post";
 import SearchForm from "@/components/SearchForm";
-import questions from "@/services/questions";
+import questionService from "@/services/questions";
+import _ from "lodash";
 
 export default {
   name: "PostingBoard",
   components: {SearchForm, Post},
   data() {
     return {
-      newestQuestions: [],
+      newestQuestion: [],
       popularQuestions: []
     }
   },
   computed: {
-    combinedQuestions() {
-      let mergedQuestions = [...this.newestQuestions, ...this.popularQuestions];
-      let sortedQuestions = this.$_.orderBy(mergedQuestions, [function(q) { return q.creationDate.unix() }], ["desc"]);
+    questions() {
+      // Merge the lists of question
+      let unsortedQuestions = [...this.newestQuestion, ...this.popularQuestions]
 
-      return sortedQuestions;
+      // Sort the questions by creation date (newest first)
+      return _.orderBy(unsortedQuestions, [(q) => (q["creationDate"].unix())], ["desc"])
     }
   },
   methods: {
     searchHandler(event) {
-      this.loadNewestQuestions(event.tag);
-      this.loadPopularQuestions(event.tag);
+      this.fetchNewestQuestions(event.tag)
+      this.fetchPopularQuestions(event.tag)
     },
-    loadNewestQuestions(tag) {
-      questions.getQuestionsForTagByCreationDate(tag).then(response => {
-        this.newestQuestions = response;
+    fetchNewestQuestions(tag) {
+      questionService.getNewestQuestions(tag).then(response => {
+        this.newestQuestion = response;
       })
     },
-    loadPopularQuestions(tag) {
-      questions.getQuestionsForTagByVotes(tag).then(response => {
+    fetchPopularQuestions(tag) {
+      questionService.getPopularQuestions(tag).then(response => {
         this.popularQuestions = response;
       })
     }
