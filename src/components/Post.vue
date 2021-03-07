@@ -45,10 +45,12 @@
 import PostContent from "@/components/PostContent";
 import questions from "@/services/questions";
 import answers from "@/services/answers";
+import responseTimer from "@/mixins/responseTimer";
 
 export default {
   name: "Posting",
   components: { PostContent },
+  mixins: [responseTimer],
   props: {
     question: {
       type: Object,
@@ -70,7 +72,12 @@ export default {
   methods: {
     clickHandler() {
       if (!this.show) {
+        this.timer()
         Promise.all([questions.getFullQuestion(this.question.id), answers.getFullAnswers(this.question.id)]).then(res => {
+          let responseTime = this.timer();
+          this.showResponseTimeToast(responseTime);
+
+          // Store the full content of the post.
           this.fullQuestion = res[0]
           this.fullAnswers = res[1]
           this.toggleShow()

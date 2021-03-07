@@ -9,11 +9,13 @@
 import Post from "@/components/Post";
 import SearchForm from "@/components/SearchForm";
 import questionService from "@/services/questions";
+import responseTimer from "@/mixins/responseTimer";
 import _ from "lodash";
 
 export default {
   name: "PostingBoard",
   components: {SearchForm, Post},
+  mixins: [responseTimer],
   data() {
     return {
       newestQuestion: [],
@@ -31,18 +33,33 @@ export default {
   },
   methods: {
     searchHandler(event) {
-      this.fetchNewestQuestions(event.tag)
-      this.fetchPopularQuestions(event.tag)
+      this.timer();
+      Promise.all([this.fetchNewestQuestions(event.tag), this.fetchPopularQuestions(event.tag)]).then(() => {
+        let responseTime = this.timer();
+        this.showResponseTimeToast(responseTime);
+      })
     },
     fetchNewestQuestions(tag) {
-      questionService.getNewestQuestions(tag).then(response => {
-        this.newestQuestion = response;
-      })
+      return questionService
+        .getNewestQuestions(tag)
+        .then(response => {
+          this.newestQuestion = response;
+          return Promise.resolve()
+        })
+        .catch(() => {
+          return Promise.reject()
+        })
     },
     fetchPopularQuestions(tag) {
-      questionService.getPopularQuestions(tag).then(response => {
-        this.popularQuestions = response;
-      })
+      return questionService
+        .getPopularQuestions(tag)
+        .then(response => {
+          this.popularQuestions = response;
+          return Promise.resolve()
+        })
+        .catch(() => {
+          return Promise.reject()
+        })
     }
   }
 }
