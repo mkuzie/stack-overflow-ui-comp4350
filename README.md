@@ -1,4 +1,4 @@
-# crap-overflow
+# stack-overflow-ui-comp4350
 
 ## Project setup
 ```
