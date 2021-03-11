@@ -23,6 +23,8 @@ let getNewestQuestions = function(tag) {
       sort: "creation",
       page: 1,
       pageSize: 10,
+      fromdate: dayjs().subtract(1, "week").unix(),
+      todate: dayjs().unix(),
       site: "stackoverflow"
     }
   }
